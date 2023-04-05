@@ -1,0 +1,62 @@
+version: '3.7'
+services:
+
+# Our kafka stuff... Stole most of this config from bitnami
+  zookeeper.local:
+    #image: docker.io/bitnami/zookeeper:3
+    build:
+      context: ./zookeeper
+      dockerfile: Dockerfile
+    networks:
+      - envoymesh
+    ports:
+      - "2181:2181"
+    volumes:
+      - "zookeeper_data:/bitnami"
+    environment:
+      - ZOO_ENABLE_AUTH=yes
+      - ZOO_SERVER_USERS=admin
+      - ZOO_SERVER_PASSWORDS=admin-secret
+        #- ZOO_CLIENT_USER=admin
+        #- ZOO_CLIENT_PASSWORD=admin-secret
+  kafka.local:
+    #image: docker.io/bitnami/kafka:2
+    build:
+      context: ./kafka
+      dockerfile: Dockerfile
+    networks:
+      - envoymesh
+    ports:
+      - "9092:9092"
+    expose:
+      - "9092"
+    volumes:
+      - "kafka_data:/bitnami"
+    environment:
+      - KAFKA_CFG_AUTO_CREATE_TOPICS_ENABLE=true
+      - KAFKA_CFG_ZOOKEEPER_CONNECT=zookeeper.local:2181
+      - KAFKA_CFG_LISTENERS=SASL_PLAINTEXT://:9092
+        #- KAFKA_CFG_SASL_MECHANISM_INTER_BROKER_PROTOCOL=PLAIN
+      - KAFKA_CFG_SASL_ENABLED_MECHANISMS=APIGEE,PLAIN
+        #- KAFKA_CFG_SASL_MECHANISM_INTER_BROKER_PROTOCOL=SASL_PLAINTEXT
+      - KAFKA_ZOOKEEPER_PROTOCOL=SASL
+      - KAFKA_ZOOKEEPER_USER=admin
+      - KAFKA_ZOOKEEPER_PASSWORD=admin-secret
+      - ALLOW_PLAINTEXT_LISTENER=yes
+      - KAFKA_CFG_SECURITY_INTER_BROKER_PROTOCOL=SASL_PLAINTEXT
+      - KAFKA_CFG_SASL_MECHANISM_INTER_BROKER_PROTOCOL=PLAIN
+      - KAFKA_CFG_LISTENERS=SASL_PLAINTEXT://localhost:9092
+      - KAFKA_CFG_ADVERTISED_LISTENERS=SASL_PLAINTEXT://localhost:9092
+      - KAFKA_CLIENT_USERS=admin
+      - KAFKA_CLIENT_PASSWORDS=admin-secret
+    depends_on:
+      - zookeeper.local
+
+volumes:
+  zookeeper_data:
+    driver: local
+  kafka_data:
+    driver: local
+
+networks:
+  envoymesh: {}
