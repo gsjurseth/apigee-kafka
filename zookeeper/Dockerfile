@@ -1,4 +1,4 @@
-FROM bitnami/zookeeper:3
+FROM docker.io/bitnami/zookeeper:3.8
 
 USER root
 #COPY zoo.cfg /opt/bitnami/zookeeper/conf/zoo.cfg

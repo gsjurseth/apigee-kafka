@@ -47,11 +47,11 @@ services:
       - KAFKA_CFG_SASL_MECHANISM_INTER_BROKER_PROTOCOL=PLAIN
       - KAFKA_CFG_LISTENERS=SASL_PLAINTEXT://localhost:9092
       - KAFKA_CFG_ADVERTISED_LISTENERS=SASL_PLAINTEXT://localhost:9092
-      - KAFKA_CLIENT_USERS=admin
-      - KAFKA_CLIENT_PASSWORDS=admin-secret
+      - KAFKA_CLIENT_USERS=admin,producer,consumer
+      - KAFKA_CLIENT_PASSWORDS=admin-secret,producer-secret,consumer-secret
+      - KAFKA_OPTS=-Djava.security.auth.login.config=/opt/bitnami/kafka/config/producer_jaas.conf
     depends_on:
       - zookeeper.local
-
 volumes:
   zookeeper_data:
     driver: local
