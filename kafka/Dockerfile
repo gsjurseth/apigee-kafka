@@ -10,7 +10,6 @@ COPY kafka-security-apigee-0.0.1.jar /opt/apigee-kafka/kafka-security-apigee-0.0
 COPY server.properties /opt/bitnami/kafka/config/server.properties 
 COPY producer_sasl.properties /opt/bitnami/kafka/config/producer_sasl.properties 
 COPY producer_jaas.config /opt/bitnami/kafka/config/producer_jaas.conf
-COPY broken_jaas.config /opt/bitnami/kafka/config/broken_jaas.conf
 COPY consumer_sasl.properties /opt/bitnami/kafka/config/consumer_sasl.properties 
 COPY consumer_jaas.config /opt/bitnami/kafka/config/consumer_jaas.conf
 COPY server_jaas.config /opt/bitnami/kafka/config/kafka_jaas.conf
